@@ -17,6 +17,10 @@ def get_gtf_db(gtf, in_memory=False):
         return gffutils.FeatureDB(db_file)
 
 def get_transcripts_in_genes(db):
+    """
+    return a dictionary where the keys are gene_ids and the values are the
+    set of transcript_ids assigned to that gene_id
+    """
     genes = defaultdict(set)
     for feature in db.all_features():
         gene_id = feature.attributes.get('gene_id', [None])[0]
@@ -25,10 +29,6 @@ def get_transcripts_in_genes(db):
             genes[gene_id].update([transcript_id])
     return genes
 
-def print_transcripts_per_gene(gene_dict):
-    for gene, transcripts in gene_dict.items():
-        print gene, len(transcripts)
-
 if __name__ == "__main__":
     description = ("Calculate number of transcripts for each gene")
     parser = ArgumentParser(description)
@@ -36,6 +36,7 @@ if __name__ == "__main__":
 
     args = parser.parse_args()
 
-    db = get_gtf_db(args.gtf, in_memory=False)
+    db = get_gtf_db(args.gtf)
     gene_dict = get_transcripts_in_genes(db)
-    print_transcripts_per_gene(gene_dict)
+    for gene, transcripts in gene_dict.items():
+        print gene, len(transcripts)
