@@ -1,3 +1,4 @@
+from __future__ import print_function
 from argparse import ArgumentParser
 import gffutils
 import os
@@ -39,4 +40,4 @@ if __name__ == "__main__":
     db = get_gtf_db(args.gtf)
     gene_dict = get_transcripts_in_genes(db)
     for transcript, gene in gene_dict.items():
-        print ",".join([transcript, gene])
+        print(",".join([transcript, gene]))
